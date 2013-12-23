@@ -32,7 +32,7 @@ public class Menu {
 	 */
 	@Id
 	@SequenceGenerator(name = "MENU_SEQ", sequenceName = "MENU_SEQ", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "NOTICE_SEQ")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MENU_SEQ")
 	private Long id;
 
 	/**
