@@ -36,15 +36,6 @@
 	<!-- 通过注解，把URL映射到Controller上，该标签默认注册DefaultAnnotationHandlerMapping和AnnotationMethodHandlerAdapter -->
 	<mvc:annotation-driven />
 
-	<!-- 视图解析器 -->
-	<bean id="viewResolver"
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="viewClass"
-			value="org.springframework.web.servlet.view.JstlView" />
-		<property name="prefix" value="/WEB-INF/pages/" />
-		<property name="suffix" value=".jsp"></property>
-	</bean>
-
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="ignoreResourceNotFound" value="true"></property>
@@ -54,54 +45,5 @@
 				<value>classpath*:/profile/config.properties</value>
 			</list>
 		</property>
-	</bean>
-
-	<!-- JPA Entity Manager Factory -->
-	<bean id="entityManagerFactory"
-		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
-		p:packagesToScan="${jpa.entity.scan.packages}" p:dataSource-ref="${jpa.datasource.name}"
-		p:jpaVendorAdapter-ref="hibernateVendor" p:jpaPropertyMap-ref="jpaPropertyMap"
-		p:persistenceUnitName="${jpa.persistence.unit.name}">
-	</bean>
-
-	<bean id="hibernateVendor"
-		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
-		p:database="${database.type}" p:showSql="true" p:generateDdl="true"
-		p:databasePlatform="${hibernate.dialect}" />
-
-	<util:map id="jpaPropertyMap">
-		<entry key="hibernate.hbm2ddl.auto" value="${hibernate.hbm2ddl.auto}" />
-		<entry key="hibernate.dialect" value="${hibernate.dialect}" />
-		<entry key="hibernate.format_sql" value="${hibernate.format_sql}" />
-		<entry key="hibernate.show_sql" value="${hibernate.show_sql}" />
-		<entry key="hibernate.transaction.jta.platform" value="${hibernate.transaction.jta.platform}" />
-		<entry key="javax.persistence.transactionType" value="${persistence.transaction.type}" />
-		<!-- To enable Hibernate's second level cache and query cache settings -->
-		<entry key="hibernate.max_fetch_depth" value="${hibernate.max_fetch_depth}" />
-		<entry key="hibernate.cache.use_second_level_cache" value="${hibernate.cache.use_second_level_cache}" />
-		<entry key="hibernate.cache.use_query_cache" value="${hibernate.cache.use_query_cache}" />
-		<!-- NOTE: if using net.sf.ehcache.hibernate.EhCacheRegionFactory for Hibernate 
-			4+, probrems happen -->
-		<entry key="hibernate.cache.region.factory_class" value="${hibernate.cache.region.factory_class}" />
-	</util:map>
-
-	<!-- User declarative transaction management -->
-	<tx:annotation-driven transaction-manager="transactionManager" />
-
-
-	<!-- This will ensure that Hibernate or JPA exceptions are automatically 
-		translated into Spring's generic DataAccessException hierarchy for those 
-		classes annotated with Repository. -->
-	<bean
-		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
-
-
-	<!-- Activate Spring Data JPA repository support -->
-	<jpa:repositories base-package="me.geloin" />
-
-	<bean id="dataSource" class="${datasource.driver}">
-		<property name="user" value="${datasource.username}" />
-		<property name="password" value="${datasource.password}" />
-		<property name="URL" value="${datasource.url}" />
 	</bean>
 </beans>
