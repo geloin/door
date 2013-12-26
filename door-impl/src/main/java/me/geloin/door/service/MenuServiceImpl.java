@@ -10,8 +10,10 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import me.geloin.door.bean.ListDto;
 import me.geloin.door.entity.Menu;
 import me.geloin.door.persistence.MenuPersistence;
+import me.geloin.door.utils.PageBean;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -37,6 +39,12 @@ public class MenuServiceImpl implements MenuService {
 		Sort sort = new Sort(order);
 
 		return menuPersistence.findAll(sort);
+	}
+
+	@Override
+	public ListDto findAll(String name, String url, Long parentId,
+			PageBean page) {
+		return menuPersistence.findAll(name, url, parentId, page);
 	}
 
 }

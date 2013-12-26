@@ -19,6 +19,7 @@ import me.geloin.door.repository.DoorRepository;
  * 
  */
 @Repository("me.geloin.door.persistence.MenuPersistence")
-public interface MenuPersistence extends DoorRepository<Menu, Long> {
+public interface MenuPersistence extends DoorRepository<Menu, Long>,
+		MenuPersistencePlus {
 
 }

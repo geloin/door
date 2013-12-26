@@ -30,12 +30,6 @@
      http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd"
 	default-lazy-init="true" default-autowire="byName">
 
-
-	<!-- 使用注解的包，包括子集 -->
-	<context:component-scan base-package="me.geloin" />
-	<!-- 通过注解，把URL映射到Controller上，该标签默认注册DefaultAnnotationHandlerMapping和AnnotationMethodHandlerAdapter -->
-	<mvc:annotation-driven />
-
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="ignoreResourceNotFound" value="true"></property>
@@ -46,4 +40,36 @@
 			</list>
 		</property>
 	</bean>
+
+	<!-- 解决与JS交互时的乱码问题，用于@ResponseBody，须在context:component-scan之前 -->
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<bean
+					class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+				<bean
+					class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>text/html;charset=utf-8</value>
+						</list>
+					</property>
+				</bean>
+				<bean
+					class="org.springframework.http.converter.ResourceHttpMessageConverter" />
+				<bean
+					class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
+				<bean
+					class="org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter" />
+				<bean
+					class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 使用注解的包，包括子集 -->
+	<context:component-scan base-package="me.geloin" />
+	<!-- 通过注解，把URL映射到Controller上，该标签默认注册DefaultAnnotationHandlerMapping和AnnotationMethodHandlerAdapter -->
+	<mvc:annotation-driven />
 </beans>
