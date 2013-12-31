@@ -8,7 +8,6 @@ package me.geloin.door.service;
 
 import java.util.List;
 
-import me.geloin.door.bean.ListDto;
 import me.geloin.door.entity.Menu;
 import me.geloin.door.utils.PageBean;
 
@@ -49,6 +48,41 @@ public interface MenuService {
 	 *            page bean for pageable
 	 * @return
 	 */
-	public ListDto findAll(String name, String url, Long parentId,
+	public List<Menu> findAll(String name, String url, Long parentId,
 			PageBean page);
+
+	/**
+	 * find by id
+	 * 
+	 * @author geloin
+	 * 
+	 * @date 2013-12-31 下午1:17:23
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public Menu findOne(Long id);
+
+	/**
+	 * delete in batch
+	 * 
+	 * @author geloin
+	 * 
+	 * @date 2013-12-31 下午4:05:25
+	 * 
+	 * @param ids
+	 */
+	public void delete(List<Long> ids);
+
+	/**
+	 * save menus
+	 * 
+	 * @author geloin
+	 * 
+	 * @date 2013-12-31 下午5:36:05
+	 * 
+	 * @param menus
+	 * @return
+	 */
+	public Menu save(Menu menu);
 }

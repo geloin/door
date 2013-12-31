@@ -36,6 +36,27 @@ body {
 	float: right;
 }
 </style>
+
+<script type="text/javascript">
+function reinitIframe(){
+	var menuIFrame = document.getElementById("menuIFrame");
+	var contentIFrame = document.getElementById("contentIFrame");
+	try{
+		var menuIFrameHeight = contentIFrame.contentWindow.document.body.scrollHeight;
+		var menuIFrameHeight = contentIFrame.contentWindow.document.documentElement.scrollHeight;
+		var menuIFrameHeight = Math.max(menuIFrameHeight, menuIFrameHeight);
+		menuIFrame.height =  menuIFrameHeight;
+		
+		var contentIFrameHeight = contentIFrame.contentWindow.document.body.scrollHeight;
+		var contentIFrameHeight = contentIFrame.contentWindow.document.documentElement.scrollHeight;
+		var contentIFrameHeight = Math.max(contentIFrameHeight, contentIFrameHeight);
+		contentIFrame.height =  contentIFrameHeight;
+		
+	}catch (ex){}
+}
+window.setInterval("reinitIframe()", 500);
+</script>
+
 </head>
 <body>
 	<div id="bodyDiv">

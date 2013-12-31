@@ -29,7 +29,7 @@
 						o.pId = 0;
 					}
 					o.name = menu.name;
-					o.url = menu.url;
+					o.url = '${ctx}' + menu.url;
 					o.open = true;
 					o.target = 'contentIFrame';
 					
@@ -55,6 +55,8 @@
 	</script>
 </head>
 <body>
-	<ul id="treeDemo" class="ztree"></ul>
+	<div style="padding: 20px;">
+		<ul id="treeDemo" class="ztree"></ul>
+	</div>
 </body>
 </html>

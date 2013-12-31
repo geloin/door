@@ -67,4 +67,40 @@ public class DataUtil {
 	public static boolean isNotEmpty(Object obj) {
 		return !isEmpty(obj);
 	}
+
+	/**
+	 * 首字母大写
+	 * 
+	 * @author Geloin
+	 * @param s
+	 * @return
+	 */
+	public static String firstLetterUpcase(String s) {
+
+		int point = s.codePointAt(0);
+		if (point >= 65 && point <= 90) {
+			return s;
+		}
+
+		return s.replaceFirst(s.charAt(0) + "", ((char) (s.charAt(0) - 32))
+				+ "");
+	}
+
+	/**
+	 * 首字母小写
+	 * 
+	 * @author Geloin
+	 * @param s
+	 * @return
+	 */
+	public static String firstLetterLowercase(String s) {
+
+		int point = s.codePointAt(0);
+		if (point >= 97 && point <= 122) {
+			return s;
+		}
+
+		return s.replaceFirst(s.charAt(0) + "", ((char) (s.charAt(0) + 32))
+				+ "");
+	}
 }

@@ -6,7 +6,9 @@
  */
 package me.geloin.door.persistence;
 
-import me.geloin.door.bean.ListDto;
+import java.util.List;
+
+import me.geloin.door.entity.Menu;
 import me.geloin.door.utils.PageBean;
 
 /**
@@ -35,7 +37,7 @@ public interface MenuPersistencePlus {
 	 *            page bean for pageable
 	 * @return
 	 */
-	public ListDto findAll(String name, String url, Long parentId,
+	public List<Menu> findAll(String name, String url, Long parentId,
 			PageBean page);
 
 }
