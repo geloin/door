@@ -8,6 +8,7 @@ package me.geloin.door.service;
 
 import java.util.List;
 
+import me.geloin.door.bean.ListDto;
 import me.geloin.door.entity.Menu;
 import me.geloin.door.utils.PageBean;
 
@@ -46,10 +47,12 @@ public interface MenuService {
 	 *            parent menu's id
 	 * @param page
 	 *            page bean for pageable
+	 * @param orderHql
+	 *            order hql
 	 * @return
 	 */
-	public List<Menu> findAll(String name, String url, Long parentId,
-			PageBean page);
+	public ListDto findAll(String name, String url, Long parentId,
+			PageBean page, String orderHql);
 
 	/**
 	 * find by id

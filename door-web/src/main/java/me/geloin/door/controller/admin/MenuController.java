@@ -11,6 +11,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import me.geloin.door.bean.ListDto;
 import me.geloin.door.bean.MenuVO;
 import me.geloin.door.controller.BaseController;
 import me.geloin.door.entity.Menu;
@@ -51,8 +52,12 @@ public class MenuController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("list")
-	public String list(HttpServletRequest request) throws Exception {
-		request.setAttribute("parentId", 1L);
+	public String list(HttpServletRequest request, @Param Long parentId)
+			throws Exception {
+		if (DataUtil.isEmpty(parentId)) {
+			parentId = 1L;
+		}
+		request.setAttribute("parentId", parentId);
 		return "admin/menu/list";
 	}
 
@@ -61,37 +66,54 @@ public class MenuController extends BaseController {
 	 * 
 	 * @author geloin
 	 * 
-	 * @date 2013-12-27 下午1:58:41
+	 * @date 2014-1-2 下午1:48:55
 	 * 
 	 * @param request
 	 * @param name
 	 * @param url
 	 * @param parentId
-	 * @param pageNum
+	 * @param page
+	 * @param rows
+	 * @param sidx
+	 * @param sord
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping("listJson")
 	@ResponseBody
 	public String listJson(HttpServletRequest request, @Param String name,
-			@Param String url, @Param Long parentId, @Param Integer pageNum)
+			@Param String url, @Param Long parentId, @Param Integer page,
+			@Param Integer rows, @Param String sidx, @Param String sord)
 			throws Exception {
 
 		if (DataUtil.isEmpty(parentId)) {
 			parentId = 1L;
 		}
 
-		PageBean page = new PageBean();
-		if (DataUtil.isEmpty(pageNum)) {
-			pageNum = 1;
+		StringBuilder orderBuilder = new StringBuilder(" order by ");
+		if (DataUtil.isNotEmpty(sidx)) {
+			orderBuilder.append(parseToOrder(sidx, sord));
+		} else {
+			orderBuilder.append(" id asc");
 		}
-		page.setPage(pageNum);
 
-		List<Menu> menus = menuService.findAll(name, url, parentId, page);
+		PageBean pageBean = new PageBean();
+		if (DataUtil.isEmpty(page)) {
+			page = 1;
+		}
+		Integer pageSize = 12;
+		if (DataUtil.isNotEmpty(rows)) {
+			pageSize = rows;
+		}
+		pageBean.setPage(page);
+		pageBean.setPageSize(pageSize);
+
+		ListDto result = menuService.findAll(name, url, parentId, pageBean,
+				orderBuilder.toString());
 
 		request.setAttribute("parentId", parentId);
 
-		return writeValueAsString(menus);
+		return writeValueAsString(result);
 	}
 
 	/**
@@ -125,7 +147,6 @@ public class MenuController extends BaseController {
 	@RequestMapping("delete")
 	@ResponseBody
 	public void delete(@RequestParam List<Long> ids) throws Exception {
-		System.out.println(ids);
 		menuService.delete(ids);
 	}
 

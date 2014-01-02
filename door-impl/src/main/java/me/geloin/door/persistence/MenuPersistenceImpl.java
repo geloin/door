@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import me.geloin.door.bean.ListDto;
 import me.geloin.door.entity.Menu;
 import me.geloin.door.utils.DataUtil;
 import me.geloin.door.utils.PageBean;
@@ -35,8 +36,8 @@ public class MenuPersistenceImpl implements MenuPersistencePlus {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Menu> findAll(String name, String url, Long parentId,
-			PageBean page) {
+	public ListDto findAll(String name, String url, Long parentId,
+			PageBean page, String orderHql) {
 
 		StringBuilder whereBuilder = new StringBuilder();
 		Map<Integer, Object> values = new HashMap<Integer, Object>();
@@ -54,12 +55,16 @@ public class MenuPersistenceImpl implements MenuPersistencePlus {
 		}
 
 		StringBuilder listBuilder = new StringBuilder("from Menu where 1 = 1 ")
-				.append(whereBuilder);
+				.append(whereBuilder).append(orderHql);
+		StringBuilder countBuilder = new StringBuilder(
+				"select count(id) from Menu where 1 = 1 ").append(whereBuilder);
 		Query listQuery = em.createQuery(listBuilder.toString());
+		Query countQuery = em.createQuery(countBuilder.toString());
 
 		if (DataUtil.isNotEmpty(values)) {
 			for (Map.Entry<Integer, Object> en : values.entrySet()) {
 				listQuery.setParameter(en.getKey(), en.getValue());
+				countQuery.setParameter(en.getKey(), en.getValue());
 			}
 		}
 
@@ -67,6 +72,25 @@ public class MenuPersistenceImpl implements MenuPersistencePlus {
 			listQuery.setFirstResult(page.getStart());
 			listQuery.setMaxResults(page.getPageSize());
 		}
-		return listQuery.getResultList();
+
+		List<Menu> rows = listQuery.getResultList();
+		Long records = Long.parseLong(countQuery.getSingleResult().toString());
+
+		ListDto result = new ListDto();
+		result.setPage(page.getPage());
+		result.setRecords(records);
+		result.setRows(rows);
+
+		Integer total = 0;
+		Integer pageSize = page.getPageSize();
+		if (records % pageSize == 0) {
+			total = (int) (records / pageSize);
+		} else {
+			total = (int) (records / pageSize) + 1;
+		}
+
+		result.setTotal(total);
+
+		return result;
 	}
 }

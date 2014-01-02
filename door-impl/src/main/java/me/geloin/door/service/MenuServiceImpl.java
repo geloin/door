@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import me.geloin.door.bean.ListDto;
 import me.geloin.door.entity.Menu;
 import me.geloin.door.persistence.MenuPersistence;
 import me.geloin.door.utils.PageBean;
@@ -41,9 +42,9 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
-	public List<Menu> findAll(String name, String url, Long parentId,
-			PageBean page) {
-		return menuPersistence.findAll(name, url, parentId, page);
+	public ListDto findAll(String name, String url, Long parentId,
+			PageBean page, String orderHql) {
+		return menuPersistence.findAll(name, url, parentId, page, orderHql);
 	}
 
 	@Override
