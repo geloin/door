@@ -64,8 +64,9 @@
 			</dependency>
 			<dependency>
 				<groupId>com.oracle</groupId>
-				<artifactId>ojdbc</artifactId>
-				<version>6</version>
+				<artifactId>classes12</artifactId>
+				<version>10.2.0.2.0</version>
+				<type>pom</type>
 			</dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>
