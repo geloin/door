@@ -69,6 +69,9 @@ insert into DOOR_MENU (ID, C_NAME, C_SORT, C_URL, C_PARENT_ID)
 values (11, '系统管理', 11, '#', 1);
 commit;
 insert into DOOR_MENU (ID, C_NAME, C_SORT, C_URL, C_PARENT_ID)
+values (12, '栏目管理', 12, '#', 1);
+commit;
+insert into DOOR_MENU (ID, C_NAME, C_SORT, C_URL, C_PARENT_ID)
 values (111, '用户管理', 111, 'admin/user/list.html', 11);
 commit;
 insert into DOOR_MENU (ID, C_NAME, C_SORT, C_URL, C_PARENT_ID)

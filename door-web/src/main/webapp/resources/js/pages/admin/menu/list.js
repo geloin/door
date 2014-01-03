@@ -49,6 +49,7 @@ $(function() {
 						sortname : 'id',
 						autowidth : true,
 						viewrecords : true,
+						height : 400,
 						sortorder : "asc",
 						multiselect : true,
 						loadComplete : function(data) {
