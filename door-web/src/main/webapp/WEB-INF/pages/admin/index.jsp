@@ -54,7 +54,7 @@ function reinitIframe(){
 		
 	}catch (ex){}
 }
-window.setInterval("reinitIframe()", 500);
+window.setInterval("reinitIframe()", 200);
 </script>
 
 </head>
