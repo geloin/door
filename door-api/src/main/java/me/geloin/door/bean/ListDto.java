@@ -15,8 +15,7 @@ import java.util.List;
  * @date 2014-1-2 下午1:37:06
  * 
  */
-@SuppressWarnings("rawtypes")
-public class ListDto {
+public class ListDto<T> {
 	/**
 	 * current page
 	 */
@@ -35,12 +34,27 @@ public class ListDto {
 	/**
 	 * current rows
 	 */
-	private List rows;
+	private List<T> rows;
 
 	/**
 	 * exception message
 	 */
 	private String userdata;
+	
+	public ListDto(Integer page, Integer pageSize, Long count, List<T> list) {
+		this.page = page;
+		this.records = count;
+		this.rows = list;
+		
+		Integer total = 0;
+		if (records % pageSize == 0) {
+			total = (int) (records / pageSize);
+		} else {
+			total = (int) (records / pageSize) + 1;
+		}
+		this.total = total;
+		
+	}
 
 	public Integer getPage() {
 		return page;
@@ -66,11 +80,11 @@ public class ListDto {
 		this.records = records;
 	}
 
-	public List getRows() {
+	public List<T> getRows() {
 		return rows;
 	}
 
-	public void setRows(List rows) {
+	public void setRows(List<T> rows) {
 		this.rows = rows;
 	}
 

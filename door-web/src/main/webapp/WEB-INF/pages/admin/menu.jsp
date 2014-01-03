@@ -29,9 +29,11 @@
 						o.pId = 0;
 					}
 					o.name = menu.name;
-					o.url = '${ctx}' + menu.url;
+					if (menu.url != '#') {
+						o.url = '${ctx}' + menu.url;
+						o.target = 'contentIFrame';
+					}
 					o.open = true;
-					o.target = 'contentIFrame';
 					
 					zNodes[n] = o;
 				});
@@ -41,12 +43,24 @@
 						simpleData : {
 							enable : true
 						}
+					},
+					view : {
+						dbClickExpand: false,
+						showLine : false
+					},
+					callback: {
+						onClick : onClick
 					}
 				};
 
 				$(document).ready(function() {
 					$.fn.zTree.init($("#treeDemo"), setting, zNodes);
 				});
+				
+				function onClick(e,treeId, treeNode) {
+					var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+					zTree.expandNode(treeNode);
+				}
 
 			} else {
 				alert(json.msg);

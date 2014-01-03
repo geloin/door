@@ -11,6 +11,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import me.geloin.door.bean.DataGridVO;
 import me.geloin.door.bean.ListDto;
 import me.geloin.door.bean.MenuVO;
 import me.geloin.door.controller.BaseController;
@@ -18,7 +19,6 @@ import me.geloin.door.entity.Menu;
 import me.geloin.door.service.MenuService;
 import me.geloin.door.utils.BeanUtil;
 import me.geloin.door.utils.DataUtil;
-import me.geloin.door.utils.PageBean;
 
 import org.jboss.logging.Param;
 import org.springframework.stereotype.Controller;
@@ -36,6 +36,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("admin/menu")
 public class MenuController extends BaseController {
+
+	/**
+	 * default parent id
+	 */
+	private static final Long DEFAULT_PARENT_ID = 1L;
 
 	@Resource(name = "me.geloin.door.service.MenuService")
 	private MenuService menuService;
@@ -55,7 +60,7 @@ public class MenuController extends BaseController {
 	public String list(HttpServletRequest request, @Param Long parentId)
 			throws Exception {
 		if (DataUtil.isEmpty(parentId)) {
-			parentId = 1L;
+			parentId = DEFAULT_PARENT_ID;
 		}
 		request.setAttribute("parentId", parentId);
 		return "admin/menu/list";
@@ -81,35 +86,14 @@ public class MenuController extends BaseController {
 	 */
 	@RequestMapping("listJson")
 	@ResponseBody
-	public String listJson(HttpServletRequest request, @Param String name,
-			@Param String url, @Param Long parentId, @Param Integer page,
-			@Param Integer rows, @Param String sidx, @Param String sord)
-			throws Exception {
+	public String listJson(HttpServletRequest request, String name, String url,
+			Long parentId, DataGridVO grid) throws Exception {
 
 		if (DataUtil.isEmpty(parentId)) {
-			parentId = 1L;
+			parentId = DEFAULT_PARENT_ID;
 		}
 
-		StringBuilder orderBuilder = new StringBuilder(" order by ");
-		if (DataUtil.isNotEmpty(sidx)) {
-			orderBuilder.append(parseToOrder(sidx, sord));
-		} else {
-			orderBuilder.append(" id asc");
-		}
-
-		PageBean pageBean = new PageBean();
-		if (DataUtil.isEmpty(page)) {
-			page = 1;
-		}
-		Integer pageSize = 12;
-		if (DataUtil.isNotEmpty(rows)) {
-			pageSize = rows;
-		}
-		pageBean.setPage(page);
-		pageBean.setPageSize(pageSize);
-
-		ListDto result = menuService.findAll(name, url, parentId, pageBean,
-				orderBuilder.toString());
+		ListDto<Menu> result = menuService.findAll(name, url, parentId, grid);
 
 		request.setAttribute("parentId", parentId);
 
@@ -129,7 +113,7 @@ public class MenuController extends BaseController {
 	 */
 	@RequestMapping("findById")
 	@ResponseBody
-	public String findByIdJson(@Param Long id) throws Exception {
+	public String findById(Long id) throws Exception {
 		Menu menu = menuService.findOne(id);
 		return writeValueAsString(menu);
 	}
@@ -165,7 +149,8 @@ public class MenuController extends BaseController {
 	public void save(MenuVO vo) throws Exception {
 
 		Menu menu = null;
-		if (DataUtil.isNotEmpty(vo.getId()) && vo.getId() > 0) {
+		if (DataUtil.isNotEmpty(vo.getId())) {
+			// 修改，仅可修改name和url
 			menu = menuService.findOne(vo.getId());
 			menu.setName(vo.getName());
 			menu.setUrl(vo.getUrl());

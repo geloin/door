@@ -8,9 +8,9 @@ package me.geloin.door.service;
 
 import java.util.List;
 
+import me.geloin.door.bean.DataGridVO;
 import me.geloin.door.bean.ListDto;
 import me.geloin.door.entity.Menu;
-import me.geloin.door.utils.PageBean;
 
 /**
  * 
@@ -45,14 +45,13 @@ public interface MenuService {
 	 *            url, controller
 	 * @param parentId
 	 *            parent menu's id
-	 * @param page
-	 *            page bean for pageable
-	 * @param orderHql
-	 *            order hql
+	 * @param grid
+	 *            view object, include page, pageSize, sortNames and
+	 *            sortDescribes
 	 * @return
 	 */
-	public ListDto findAll(String name, String url, Long parentId,
-			PageBean page, String orderHql);
+	public ListDto<Menu> findAll(String name, String url, Long parentId,
+			DataGridVO grid);
 
 	/**
 	 * find by id
@@ -78,7 +77,7 @@ public interface MenuService {
 	public void delete(List<Long> ids);
 
 	/**
-	 * save menus
+	 * save menu
 	 * 
 	 * @author geloin
 	 * 

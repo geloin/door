@@ -6,6 +6,7 @@
  */
 package me.geloin.door.utils;
 
+import java.security.MessageDigest;
 import java.util.Collection;
 import java.util.Map;
 
@@ -102,5 +103,25 @@ public class DataUtil {
 
 		return s.replaceFirst(s.charAt(0) + "", ((char) (s.charAt(0) + 32))
 				+ "");
+	}
+
+	/**
+	 * digest String
+	 * 
+	 * @author geloin
+	 * 
+	 * @date 2014-1-3 下午4:18:43
+	 * 
+	 * @param password
+	 * @return
+	 * @throws Exception
+	 */
+	public static String digest(String password) {
+		try {
+			MessageDigest digest = MessageDigest.getInstance("SHA");
+			return new String(digest.digest(password.getBytes("UTF-8")));
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

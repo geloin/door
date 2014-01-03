@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-<%@ include file="/resources.jsp"%>
+<%@ include file="/grid.jsp"%>
 
 <title>Insert title here</title>
 
@@ -28,7 +28,7 @@
 		<table id="userTable"></table>
 		<div id="userPager"></div>
 	</div>
-	<div id="saveMenuDialog" style="display: none;" title="新增菜单">
+	<div id="saveMenuDialog" style="display: none;">
 		<input type="hidden" id="id" name="id" />
 		<div>
 			菜单名称：<input type="text" id="name" name="name" class="inputEl" />
