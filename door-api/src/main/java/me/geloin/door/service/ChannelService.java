@@ -2,7 +2,7 @@
  *
  * @author geloin
  *
- * @date 2013-12-23 上午9:41:34
+ * @date 2014-1-3 下午1:56:50
  */
 package me.geloin.door.service;
 
@@ -10,27 +10,16 @@ import java.util.List;
 
 import me.geloin.door.bean.DataGridVO;
 import me.geloin.door.bean.ListDto;
-import me.geloin.door.entity.Menu;
+import me.geloin.door.entity.Channel;
 
 /**
  * 
  * @author geloin
  * 
- * @date 2013-12-23 上午9:41:34
+ * @date 2014-1-3 下午1:56:50
  * 
  */
-public interface MenuService {
-
-	/**
-	 * 查询全部，按sort升序排序
-	 * 
-	 * @author geloin
-	 * 
-	 * @date 2013-12-23 上午9:41:51
-	 * 
-	 * @return
-	 */
-	public List<Menu> findAll();
+public interface ChannelService {
 
 	/**
 	 * find by queries
@@ -41,17 +30,14 @@ public interface MenuService {
 	 * 
 	 * @param name
 	 *            name
-	 * @param url
-	 *            url, controller
 	 * @param parentId
-	 *            parent menu's id
+	 *            parent channel's id
 	 * @param grid
 	 *            view object, include page, pageSize, sortNames and
 	 *            sortDescribes
 	 * @return
 	 */
-	public ListDto<Menu> findAll(String name, String url, Long parentId,
-			DataGridVO grid);
+	public ListDto<Channel> findAll(String name, Long parentId, DataGridVO grid);
 
 	/**
 	 * find by id
@@ -63,7 +49,7 @@ public interface MenuService {
 	 * @param id
 	 * @return
 	 */
-	public Menu findOne(Long id);
+	public Channel findOne(Long id);
 
 	/**
 	 * delete in batch
@@ -77,23 +63,23 @@ public interface MenuService {
 	public void delete(List<Long> ids);
 
 	/**
-	 * save menu
+	 * save channel
 	 * 
 	 * @author geloin
 	 * 
 	 * @date 2013-12-31 下午5:36:05
 	 * 
-	 * @param menu
+	 * @param channel
 	 * @return
 	 */
-	public Menu save(Menu menu);
+	public Channel save(Channel channel);
 
 	/**
 	 * update sort
 	 * 
 	 * @author geloin
 	 * 
-	 * @date 2014-1-9 上午10:36:31
+	 * @date 2014-1-9 下午2:50:34
 	 * 
 	 * @param ids
 	 * @param optId

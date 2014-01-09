@@ -35,36 +35,39 @@ public class MenuPersistenceImplTest extends BaseTestCase {
 		String name = "%%";
 		String url = "%%";
 		Pageable page = null;
-		List<Long> count = menuPersistence.countByParentIdAndNameLikeAndUrlLike(
-				parentId, name, url, page);
+		List<Long> count = menuPersistence
+				.countByParentIdAndNameLikeAndUrlLike(parentId, name, url, page);
 		System.out.println(count);
 	}
-	
+
 	@Test
 	public void testFindByParentIdAndNameLikeAndUrlLike() throws Exception {
 		Long parentId = 11L;
 		String name = "%%";
 		String url = "%%";
-		
+
 		Pageable page = new PageRequest(0, 12);
-		
-		List<Menu> menus = menuPersistence.findByParentIdAndNameLikeAndUrlLike(parentId, name, url, page);
+
+		List<Menu> menus = menuPersistence.findByParentIdAndNameLikeAndUrlLike(
+				parentId, name, url, page);
 		for (Menu menu : menus) {
 			System.out.println(menu.getName());
 		}
-		
+
 		System.out.println("================================");
-		
+
 		page = new PageRequest(0, 1);
-		menus = menuPersistence.findByParentIdAndNameLikeAndUrlLike(parentId, name, url, page);
+		menus = menuPersistence.findByParentIdAndNameLikeAndUrlLike(parentId,
+				name, url, page);
 		for (Menu menu : menus) {
 			System.out.println(menu.getName());
 		}
-		
+
 		System.out.println("================================");
-		
+
 		page = new PageRequest(1, 1);
-		menus = menuPersistence.findByParentIdAndNameLikeAndUrlLike(parentId, name, url, page);
+		menus = menuPersistence.findByParentIdAndNameLikeAndUrlLike(parentId,
+				name, url, page);
 		for (Menu menu : menus) {
 			System.out.println(menu.getName());
 		}

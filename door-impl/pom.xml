@@ -35,8 +35,7 @@
 
 		<dependency>
 			<groupId>com.oracle</groupId>
-			<artifactId>classes12</artifactId>
-			<type>pom</type>
+			<artifactId>ojdbc</artifactId>
 		</dependency>
 
 		<dependency>

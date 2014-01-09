@@ -46,7 +46,7 @@ $(function() {
 						rowList : [ 10, 20, 30 ],
 						pager : '#userPager',
 						sortable : true,
-						sortname : 'id',
+						sortname : 'sort',
 						autowidth : true,
 						viewrecords : true,
 						height : 400,
@@ -115,7 +115,41 @@ $(function() {
 		buttonicon : 'none',
 		onClickButton : showParent,
 		id : 'to_parent'
+	}).navButtonAdd('#userPager', {
+		caption : '置顶',
+		buttonIcon : 'none',
+		onClickButton : updateSort,
+		id : 'updateSort1'
+	}).navButtonAdd('#userPager', {
+		caption : '上移',
+		buttonIcon : 'none',
+		onClickButton : updateSort,
+		id : 'updateSort2'
+	}).navButtonAdd('#userPager', {
+		caption : '下移',
+		buttonIcon : 'none',
+		onClickButton : updateSort,
+		id : 'updateSort3'
+	}).navButtonAdd('#userPager', {
+		caption : '置底',
+		buttonIcon : 'none',
+		onClickButton : updateSort,
+		id : 'updateSort4'
+	}).navButtonAdd('#userPager', {
+		caption : '刷新排序号',
+		buttonIcon : 'none',
+		onClickButton : reloadSort,
+		id : 'btn_resetSort'
 	});
+
+	function reloadSort() {
+		var o = {};
+		o.parentId = parentId;
+		var url = ctx + 'admin/menu/reloadSort.html';
+		$.post(url, o, function() {
+			$('#userTable').trigger('reloadGrid');
+		});
+	}
 
 	function changeButtonDisplay(ids, display) {
 		$.each(ids, function(i, id) {
@@ -135,6 +169,28 @@ $(function() {
 				jAlert('已经是最顶级', '提示');
 			}
 		});
+	}
+
+	function updateSort(e) {
+		var tarId = e.currentTarget.id.toString();
+		var optId = tarId.substring('updateSort'.length, tarId.length);
+		var gr = $(this).getGridParam('selarrrow');
+		if (gr.length == 0) {
+			jAlert('请先选择数据再操作!');
+		} else {
+			var url = ctx + 'admin/menu/updateSort.html?';
+			var o = {};
+			$.each(gr, function(i, id) {
+				url += 'ids=' + id + '&';
+			});
+			url = url.substring(0, url.length - 1);
+
+			o.optId = optId;
+			o.parentId = parentId;
+			$.post(url, o, function() {
+				$('#userTable').trigger('reloadGrid');
+			});
+		}
 	}
 
 	function addRow() {

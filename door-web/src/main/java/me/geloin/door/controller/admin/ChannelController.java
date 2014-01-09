@@ -2,7 +2,7 @@
  *
  * @author geloin
  *
- * @date 2013-12-23 下午12:55:43
+ * @date 2014-1-7 下午3:59:45
  */
 package me.geloin.door.controller.admin;
 
@@ -11,12 +11,12 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import me.geloin.door.bean.ChannelVO;
 import me.geloin.door.bean.DataGridVO;
 import me.geloin.door.bean.ListDto;
-import me.geloin.door.bean.MenuVO;
 import me.geloin.door.controller.BaseController;
-import me.geloin.door.entity.Menu;
-import me.geloin.door.service.MenuService;
+import me.geloin.door.entity.Channel;
+import me.geloin.door.service.ChannelService;
 import me.geloin.door.utils.BeanUtil;
 import me.geloin.door.utils.DataUtil;
 
@@ -29,74 +29,59 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 
  * @author geloin
  * 
- * @date 2013-12-23 下午12:55:43
+ * @date 2014-1-7 下午3:59:45
  * 
  */
 @Controller
-@RequestMapping("admin/menu")
-public class MenuController extends BaseController {
+@RequestMapping("admin/channel")
+public class ChannelController extends BaseController {
+
+	@Resource(name = "me.geloin.door.service.ChannelService")
+	private ChannelService channelService;
 
 	/**
-	 * default parent id
-	 */
-	private static final Long DEFAULT_PARENT_ID = 1L;
-
-	@Resource(name = "me.geloin.door.service.MenuService")
-	private MenuService menuService;
-
-	/**
-	 * to list grid
+	 * to channel list
 	 * 
 	 * @author geloin
 	 * 
-	 * @date 2013-12-31 下午5:52:25
+	 * @date 2014-1-3 下午1:05:21
 	 * 
-	 * @param request
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping("list")
 	public String list(HttpServletRequest request, Long parentId)
 			throws Exception {
-		if (DataUtil.isEmpty(parentId)) {
-			parentId = DEFAULT_PARENT_ID;
+		if (DataUtil.isNotEmpty(parentId)) {
+			request.setAttribute("parentId", parentId);
 		}
-		request.setAttribute("parentId", parentId);
-		return "admin/menu/list";
+
+		return "admin/channel/list";
 	}
 
 	/**
-	 * query menu list by conditions, and then return JSON value.
+	 * find channel list json
 	 * 
 	 * @author geloin
 	 * 
-	 * @date 2014-1-2 下午1:48:55
+	 * @date 2014-1-3 下午4:03:32
 	 * 
-	 * @param request
-	 * @param name
-	 * @param url
-	 * @param parentId
-	 * @param page
-	 * @param rows
-	 * @param sidx
-	 * @param sord
+	 * @param loginName
+	 * @param firstName
+	 * @param lastName
+	 * @param grid
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping("listJson")
 	@ResponseBody
-	public String listJson(HttpServletRequest request, String name, String url,
-			Long parentId, DataGridVO grid) throws Exception {
+	public String listJson(String name, Long parentId, DataGridVO grid)
+			throws Exception {
 
-		if (DataUtil.isEmpty(parentId)) {
-			parentId = DEFAULT_PARENT_ID;
-		}
+		ListDto<Channel> channels = channelService
+				.findAll(name, parentId, grid);
 
-		ListDto<Menu> result = menuService.findAll(name, url, parentId, grid);
-
-		request.setAttribute("parentId", parentId);
-
-		return writeValueAsString(result);
+		return writeValueAsString(channels);
 	}
 
 	/**
@@ -104,7 +89,7 @@ public class MenuController extends BaseController {
 	 * 
 	 * @author geloin
 	 * 
-	 * @date 2013-12-31 下午1:18:34
+	 * @date 2014-1-3 下午4:08:23
 	 * 
 	 * @param id
 	 * @return
@@ -113,16 +98,16 @@ public class MenuController extends BaseController {
 	@RequestMapping("findById")
 	@ResponseBody
 	public String findById(Long id) throws Exception {
-		Menu menu = menuService.findOne(id);
-		return writeValueAsString(menu);
+		Channel channel = channelService.findOne(id);
+		return writeValueAsString(channel);
 	}
 
 	/**
-	 * delete in batch
+	 * delete channels
 	 * 
 	 * @author geloin
 	 * 
-	 * @date 2013-12-31 下午4:06:48
+	 * @date 2014-1-3 下午4:09:21
 	 * 
 	 * @param ids
 	 * @throws Exception
@@ -130,35 +115,38 @@ public class MenuController extends BaseController {
 	@RequestMapping("delete")
 	@ResponseBody
 	public void delete(@RequestParam List<Long> ids) throws Exception {
-		menuService.delete(ids);
+		channelService.delete(ids);
 	}
 
 	/**
-	 * save
+	 * save channel
 	 * 
 	 * @author geloin
 	 * 
-	 * @date 2013-12-31 下午5:29:20
+	 * @date 2014-1-3 下午4:09:58
 	 * 
-	 * @param vo
+	 * @param channel
 	 * @throws Exception
 	 */
 	@RequestMapping("save")
 	@ResponseBody
-	public void save(MenuVO vo) throws Exception {
+	public void save(ChannelVO vo) throws Exception {
 
-		Menu menu = null;
+		Channel channel = null;
 		if (DataUtil.isNotEmpty(vo.getId())) {
-			// 修改，仅可修改name和url
-			menu = menuService.findOne(vo.getId());
-			menu.setName(vo.getName());
-			menu.setUrl(vo.getUrl());
+			// 修改，仅可修改firstName和lastName
+			channel = channelService.findOne(vo.getId());
+			channel.setName(vo.getName());
 		} else {
-			menu = BeanUtil.convertBean(Menu.class, vo);
-			Menu parent = menuService.findOne(vo.getParentId());
-			menu.setParent(parent);
+			channel = BeanUtil.convertBean(Channel.class, vo);
 		}
-		menuService.save(menu);
+
+		if (DataUtil.isNotEmpty(vo.getParentId())) {
+			Channel parent = channelService.findOne(vo.getParentId());
+			channel.setParent(parent);
+		}
+
+		channelService.save(channel);
 	}
 
 	/**
@@ -176,7 +164,7 @@ public class MenuController extends BaseController {
 	@ResponseBody
 	public void updateSort(@RequestParam List<Long> ids, Integer optId,
 			Long parentId) throws Exception {
-		menuService.updateSort(ids, optId, parentId);
+		channelService.updateSort(ids, optId, parentId);
 	}
 
 	/**
@@ -192,6 +180,6 @@ public class MenuController extends BaseController {
 	@RequestMapping("reloadSort")
 	@ResponseBody
 	public void reloadSort(Long parentId) throws Exception {
-		menuService.reloadSort(parentId);
+		channelService.reloadSort(parentId);
 	}
 }

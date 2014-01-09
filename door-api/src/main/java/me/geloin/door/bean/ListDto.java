@@ -40,12 +40,16 @@ public class ListDto<T> {
 	 * exception message
 	 */
 	private String userdata;
-	
+
+	public ListDto() {
+
+	}
+
 	public ListDto(Integer page, Integer pageSize, Long count, List<T> list) {
 		this.page = page;
 		this.records = count;
 		this.rows = list;
-		
+
 		Integer total = 0;
 		if (records % pageSize == 0) {
 			total = (int) (records / pageSize);
@@ -53,7 +57,7 @@ public class ListDto<T> {
 			total = (int) (records / pageSize) + 1;
 		}
 		this.total = total;
-		
+
 	}
 
 	public Integer getPage() {

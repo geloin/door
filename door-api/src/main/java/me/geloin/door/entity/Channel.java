@@ -2,11 +2,9 @@
  *
  * @author geloin
  *
- * @date 2013-12-23 上午9:30:17
+ * @date 2014-1-7 下午4:07:32
  */
 package me.geloin.door.entity;
-
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,48 +20,39 @@ import javax.persistence.Table;
  * 
  * @author geloin
  * 
- * @date 2013-12-23 上午9:30:17
+ * @date 2014-1-7 下午4:07:32
  * 
  */
 @Entity
-@Table(name = "DOOR_MENU")
-public class Menu {
+@Table(name = "DOOR_CHANNEL")
+public class Channel {
 
 	/**
-	 * 主键
+	 * id
 	 */
 	@Id
-	@SequenceGenerator(name = "MENU_SEQ", sequenceName = "MENU_SEQ", allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MENU_SEQ")
+	@SequenceGenerator(name = "CHANNEL_SEQ", sequenceName = "CHANNEL_SEQ", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CHANNEL_SEQ")
 	private Long id;
 
 	/**
-	 * 名称
+	 * name
 	 */
 	@Column(name = "C_NAME")
 	private String name;
 
 	/**
-	 * 地址
-	 */
-	@Column(name = "C_URL")
-	private String url;
-
-	/**
-	 * 排序
+	 * sort num
 	 */
 	@Column(name = "C_SORT")
 	private Long sort;
 
 	/**
-	 * 父节点
+	 * parent channel
 	 */
 	@ManyToOne
 	@JoinColumn(name = "C_PARENT_ID")
-	private Menu parent;
-
-	@Column(name = "C_CREATE_TIME")
-	private Date createTime;
+	private Channel parent;
 
 	public Long getId() {
 		return id;
@@ -89,28 +78,12 @@ public class Menu {
 		this.sort = sort;
 	}
 
-	public Menu getParent() {
+	public Channel getParent() {
 		return parent;
 	}
 
-	public void setParent(Menu parent) {
+	public void setParent(Channel parent) {
 		this.parent = parent;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
 	}
 
 }

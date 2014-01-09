@@ -17,7 +17,8 @@ create table DOOR_MENU
   C_NAME      VARCHAR2(255),
   C_SORT      NUMBER(19),
   C_URL       VARCHAR2(255),
-  C_PARENT_ID NUMBER(19)
+  C_PARENT_ID NUMBER(19),
+  C_CREATE_TIME DATE
 );
 alter table DOOR_MENU
   add primary key (ID)
@@ -57,7 +58,34 @@ Before Insert On door_menu For Each Row
 Declare
 meSort Number(10);
 Begin
-     Select Max(c_sort) + 1 Into meSort From door_menu Where c_parent_id = :New.c_parent_id;
+     Select Max(c_sort) Into meSort From door_menu Where c_parent_id = :New.c_parent_id;
+     if (meSort is null) then
+     	meSort := 0;
+     end if;
+     meSort := meSort + 1;
+     :New.c_sort := meSort;
+End;
+/
+
+prompt
+prompt Creating trigger DOOR_CHANNEL_ID_GENERATOR
+prompt =======================================
+prompt
+Create Or Replace Trigger door_channel_id_generator
+-- 触发器，用于生成sort
+Before Insert On door_channel For Each Row
+Declare
+meSort Number(10);
+Begin
+     If :New.c_parent_id Is Null Then
+         Select Max(c_sort) Into meSort From door_channel Where c_parent_id Is Null;
+     Else
+          Select Max(c_sort) Into meSort From door_channel Where c_parent_id = :New.c_parent_id;
+     End If;
+     if (meSort is null) then
+     	meSort := 0;
+     end if;
+     meSort := meSort + 1;
      :New.c_sort := meSort;
 End;
 /
