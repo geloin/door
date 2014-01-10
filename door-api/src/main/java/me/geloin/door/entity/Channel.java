@@ -6,15 +6,21 @@
  */
 package me.geloin.door.entity;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 
@@ -50,9 +56,16 @@ public class Channel {
 	/**
 	 * parent channel
 	 */
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "C_PARENT_ID")
 	private Channel parent;
+
+	/**
+	 * articles
+	 */
+	@OneToMany(mappedBy = "channel", fetch = FetchType.EAGER)
+	@JsonIgnore
+	private Set<Article> articles;
 
 	public Long getId() {
 		return id;
@@ -84,6 +97,14 @@ public class Channel {
 
 	public void setParent(Channel parent) {
 		this.parent = parent;
+	}
+
+	public Set<Article> getArticles() {
+		return articles;
+	}
+
+	public void setArticles(Set<Article> articles) {
+		this.articles = articles;
 	}
 
 }

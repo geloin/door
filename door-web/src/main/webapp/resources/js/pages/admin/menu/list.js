@@ -6,6 +6,7 @@ $(function() {
 						postData : {
 							'parentId' : parentId
 						},
+						caption : '菜单管理',
 						datatype : "json",
 						colNames : [ '序号', '名称', '地址', '排序', '操作' ],
 						colModel : [ {

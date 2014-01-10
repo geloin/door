@@ -16,6 +16,4 @@
 	
 <script type="text/javascript">
 	var ctx = '${ctx}';
-	var jsDir = ctx + 'resources/js/';
-	var cssDir = ctx + 'resources/css/';
 </script>

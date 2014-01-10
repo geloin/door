@@ -178,6 +178,7 @@ $(function() {
 						postData : {
 							'parentId' : parentId
 						},
+						caption : '栏目管理',
 						datatype : 'json',
 						colNames : [ '序号', '名称', '排序', '操作' ],
 						colModel : [ {

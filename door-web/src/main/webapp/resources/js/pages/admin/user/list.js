@@ -167,6 +167,7 @@ $(function() {
 					{
 						url : ctx + 'admin/user/listJson.html',
 						datatype : 'json',
+						caption : '用户管理',
 						colNames : [ '序号', '登录名', '屏幕名' ],
 						colModel : [ {
 							name : 'id',

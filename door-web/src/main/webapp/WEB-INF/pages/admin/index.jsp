@@ -42,8 +42,8 @@ function reinitIframe(){
 	var menuIFrame = document.getElementById("menuIFrame");
 	var contentIFrame = document.getElementById("contentIFrame");
 	try{
-		var menuIFrameHeight = contentIFrame.contentWindow.document.body.scrollHeight;
-		var menuIFrameHeight = contentIFrame.contentWindow.document.documentElement.scrollHeight;
+		var menuIFrameHeight = menuIFrame.contentWindow.document.body.scrollHeight;
+		var menuIFrameHeight = menuIFrame.contentWindow.document.documentElement.scrollHeight;
 		var menuIFrameHeight = Math.max(menuIFrameHeight, menuIFrameHeight);
 		menuIFrame.height =  menuIFrameHeight;
 		
@@ -60,7 +60,6 @@ window.setInterval("reinitIframe()", 200);
 </head>
 <body>
 	<div id="bodyDiv">
-		<div id="topBanner"></div>
 		<div>
 			<div id="menuDiv">
 				<iframe id="menuIFrame" name="menuIFrame" align="left"

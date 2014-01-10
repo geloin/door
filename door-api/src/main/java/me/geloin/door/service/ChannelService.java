@@ -97,4 +97,16 @@ public interface ChannelService {
 	 * @param parentId
 	 */
 	public void reloadSort(Long parentId);
+
+	/**
+	 * find input's name and its all parent name
+	 * 
+	 * @author geloin
+	 * 
+	 * @date 2014-1-10 下午5:18:17
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public String findAllChannelNameByID(Long id);
 }

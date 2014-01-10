@@ -38,7 +38,7 @@
 	</bean>
 	
 	<!-- 异常控制 -->
-	<bean id="exceptionResolver"
+	<!-- <bean id="exceptionResolver"
 		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
 		<property name="defaultErrorView" value="/exception" />
 		<property name="exceptionMappings">
@@ -46,6 +46,6 @@
 				<prop key="java.lang.Exception">/exception</prop>
 			</props>
 		</property>
-	</bean>
+	</bean> -->
 
 </beans>

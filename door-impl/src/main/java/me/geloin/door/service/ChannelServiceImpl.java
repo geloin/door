@@ -263,4 +263,31 @@ public class ChannelServiceImpl implements ChannelService {
 		channelPersistence.save(channels);
 	}
 
+	@Override
+	public String findAllChannelNameByID(Long id) {
+
+		Channel channel = channelPersistence.findOne(id);
+
+		return findName(channel, channel.getName());
+	}
+
+	/**
+	 * iterator to find name
+	 * 
+	 * @author geloin
+	 * 
+	 * @date 2014-1-10 下午5:22:20
+	 * 
+	 * @param channel
+	 * @param name
+	 * @return
+	 */
+	private String findName(Channel channel, String name) {
+		if (DataUtil.isNotEmpty(channel.getParent())) {
+			name = channel.getParent().getName() + "-" + name;
+			return findName(channel.getParent(), name);
+		}
+		return name;
+	}
+
 }
