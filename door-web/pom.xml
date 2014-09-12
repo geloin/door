@@ -15,9 +15,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>me.geloin.door</groupId>
-			<artifactId>door-assembly</artifactId>
-			<type>pom</type>
-			<version>0.0.1-SNAPSHOT</version>
+			<artifactId>door-impl</artifactId>
 		</dependency>
 
 		<dependency>

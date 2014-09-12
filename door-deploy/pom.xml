@@ -13,7 +13,6 @@
 
 	<modules>
 		<module>../door-api</module>
-		<module>../door-assembly</module>
 		<module>../door-impl</module>
 		<module>../door-parent</module>
 		<module>../door-web</module>
