@@ -6,23 +6,27 @@
  */
 package me.geloin.door.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
-import me.geloin.door.bean.DataGridVO;
-import me.geloin.door.bean.ListDto;
-import me.geloin.door.constant.Constants;
+import me.geloin.door.bean.CollVO;
 import me.geloin.door.entity.Menu;
 import me.geloin.door.persistence.MenuPersistence;
-import me.geloin.door.utils.BusinessUtil;
-import me.geloin.door.utils.DataUtil;
+import me.geloin.door.utils.Utils;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 /**
@@ -48,182 +52,68 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
-	public ListDto<Menu> findAll(String name, String url, Long parentId,
-			DataGridVO grid) {
+	public CollVO<Menu> findAll(final String name, final String url,
+			final Long parentId, Integer pageNum, Integer pageSize) {
 
-		name = BusinessUtil.generateLikeValue(name);
-		url = BusinessUtil.generateLikeValue(url);
+		pageNum -= 1;
+		Sort sort = new Sort("sort");
+		Pageable pageable = new PageRequest(pageNum, pageSize, sort);
+		Page<Menu> menus = menuPersistence.findAll(new Specification<Menu>() {
 
-		Pageable pageRequest = BusinessUtil.generatePageable(grid);
+			@Override
+			public Predicate toPredicate(Root<Menu> root,
+					CriteriaQuery<?> query, CriteriaBuilder cb) {
 
-		List<Menu> menus = menuPersistence.findByParentIdAndNameLikeAndUrlLike(
-				parentId, name, url, pageRequest);
-		Long count = menuPersistence.countByParentIdAndNameLikeAndUrlLike(
-				parentId, name, url, pageRequest).get(0);
+				List<Predicate> pdts = new ArrayList<Predicate>();
+				if (Utils.isNotEmpty(name)) {
+					Predicate namePdt = cb
+							.like(root.get("name").as(String.class), "%" + name
+									+ "%");
+					pdts.add(namePdt);
+				}
 
-		ListDto<Menu> result = new ListDto<Menu>(grid.getPage(),
-				grid.getRows(), count, menus);
+				if (Utils.isNotEmpty(url)) {
+					Predicate urlPdt = cb.like(
+							root.get("url").as(String.class), "%" + url + "%");
+					pdts.add(urlPdt);
+				}
+
+				if (Utils.isNotEmpty(parentId) && parentId.intValue() != 0) {
+					Predicate pidPdt = cb.equal(
+							root.get("parentId").as(Long.class), parentId);
+					pdts.add(pidPdt);
+				}
+
+				Predicate[] predicates = new Predicate[pdts.size()];
+				return cb.and(pdts.toArray(predicates));
+			}
+		}, pageable);
+
+		CollVO<Menu> result = new CollVO<Menu>();
+		result.setCount(menus.getTotalElements());
+		result.setData(menus.getContent());
 
 		return result;
 	}
 
 	@Override
-	public Menu findOne(Long id) {
-		return menuPersistence.findOne(id);
-	}
+	public Menu save(Menu entity) {
+		Menu menu = null;
 
-	@Override
-	public void delete(List<Long> ids) {
-		for (Long id : ids) {
-			menuPersistence.delete(id);
+		if (Utils.isEmpty(entity.getSort())) {
+			entity.setSort(0L);
 		}
-	}
 
-	@Override
-	public Menu save(Menu menu) {
-
-		// set property createTime when id is empty
-		if (DataUtil.isEmpty(menu.getId())) {
-			menu.setCreateTime(new Date());
+		if (Utils.isNotEmpty(entity.getId())) {
+			menu = menuPersistence.findOne(entity.getId());
+			menu.setName(entity.getName());
+			menu.setUrl(entity.getUrl());
+		} else {
+			entity.setCreateTime(new Date());
+			menu = entity;
 		}
 
 		return menuPersistence.save(menu);
-	}
-
-	@Override
-	public void updateSort(List<Long> ids, Integer optId, Long parentId) {
-		Constants.UpdateSortOpt opt = Constants.convertIntToOpt(optId);
-		Integer length = ids.size();
-		switch (opt) {
-		case TO_TOP: {
-			// update all menus' sort miss sort + length
-			menuPersistence.updateAllSortPlus(new Long(length), parentId);
-
-			Sort.Order order = new Sort.Order(Sort.Direction.ASC, "sort");
-			Sort sort = new Sort(order);
-			List<Menu> toUpdateMenus = menuPersistence.findByIdIn(ids, sort);
-			for (int menuIndex = 0; menuIndex < toUpdateMenus.size(); menuIndex++) {
-				Menu menu = toUpdateMenus.get(menuIndex);
-				menu.setSort(new Long(menuIndex + 1));
-				toUpdateMenus.set(menuIndex, menu);
-			}
-
-			menuPersistence.save(toUpdateMenus);
-
-			break;
-		}
-		case TO_UP: {
-
-			// find all in input
-			Sort.Order order = new Sort.Order(Sort.Direction.ASC, "sort");
-			Sort sort = new Sort(order);
-			List<Menu> toUpdateMenus = menuPersistence.findByIdIn(ids, sort);
-
-			// get the first, then cath it's sort
-			Long firstSort = toUpdateMenus.get(0).getSort();
-
-			// update firtSort menu's previous sort
-			order = new Sort.Order(Sort.Direction.DESC, "sort");
-			sort = new Sort(order);
-			Pageable pageable = new PageRequest(0, 1, sort);
-			List<Menu> previousMenus = menuPersistence
-					.findByParentIdAndSortLessThan(parentId, firstSort,
-							pageable);
-			if (DataUtil.isEmpty(previousMenus)) {
-				break;
-			}
-			Menu previousMenu = previousMenus.get(0);
-			// update previous menu's sort miss sort plus length
-			menuPersistence.updateSort(previousMenu.getId(),
-					previousMenu.getSort() + length);
-
-			// update to update menus' sort miss sort minus 1
-			for (int menuIndex = 0; menuIndex < toUpdateMenus.size(); menuIndex++) {
-				Menu toUpdateMenu = toUpdateMenus.get(menuIndex);
-				toUpdateMenu.setSort(toUpdateMenu.getSort() - 1);
-				toUpdateMenus.set(menuIndex, toUpdateMenu);
-			}
-			menuPersistence.save(toUpdateMenus);
-
-			break;
-		}
-		case TO_DOWN: {
-			// find all in input
-			Sort.Order order = new Sort.Order(Sort.Direction.ASC, "sort");
-			Sort sort = new Sort(order);
-			List<Menu> toUpdateMenus = menuPersistence.findByIdIn(ids, sort);
-
-			// get the last, then cath it's sort
-			Long lastSort = toUpdateMenus.get(toUpdateMenus.size() - 1)
-					.getSort();
-
-			// update lastSort menu's next sort
-			order = new Sort.Order(Sort.Direction.ASC, "sort");
-			sort = new Sort(order);
-			Pageable pageable = new PageRequest(0, 1, sort);
-			List<Menu> nextMenus = menuPersistence
-					.findByParentIdAndSortGreaterThan(parentId, lastSort,
-							pageable);
-			if (DataUtil.isEmpty(nextMenus)) {
-				break;
-			}
-			Menu nextMenu = nextMenus.get(0);
-			// update next menu's sort miss sort minus length
-			menuPersistence.updateSort(nextMenu.getId(), nextMenu.getSort()
-					- length);
-
-			// update to update menus' sort miss sort plus 1
-			for (int menuIndex = 0; menuIndex < toUpdateMenus.size(); menuIndex++) {
-				Menu toUpdateMenu = toUpdateMenus.get(menuIndex);
-				toUpdateMenu.setSort(toUpdateMenu.getSort() + 1);
-				toUpdateMenus.set(menuIndex, toUpdateMenu);
-			}
-			menuPersistence.save(toUpdateMenus);
-
-			break;
-		}
-		case TO_BOTTOM: {
-			// update all menus' sort miss sort - length
-			menuPersistence.updateAllSortMinus(new Long(length), parentId);
-
-			// find max sort
-			Long maxSort = menuPersistence.findMaxSort(parentId);
-
-			Sort.Order order = new Sort.Order(Sort.Direction.ASC, "sort");
-			Sort sort = new Sort(order);
-			List<Menu> toUpdateMenus = menuPersistence.findByIdIn(ids, sort);
-			for (int menuIndex = 0; menuIndex < toUpdateMenus.size(); menuIndex++) {
-				Menu menu = toUpdateMenus.get(menuIndex);
-				menu.setSort(new Long(menuIndex + 1 + maxSort));
-				toUpdateMenus.set(menuIndex, menu);
-			}
-
-			menuPersistence.save(toUpdateMenus);
-
-			break;
-		}
-		default: {
-			break;
-		}
-		}
-
-		// reset sort
-		reloadSort(parentId);
-	}
-
-	@Override
-	public void reloadSort(Long parentId) {
-		Sort.Order order = new Sort.Order(Direction.ASC, "sort");
-		Sort sort = new Sort(order);
-		Pageable pageable = new PageRequest(0, Integer.MAX_VALUE, sort);
-		List<Menu> menus = menuPersistence.findByParentIdAndNameLikeAndUrlLike(
-				parentId, "%%", "%%", pageable);
-		for (int menuIndex = 0; menuIndex < menus.size(); menuIndex++) {
-			Menu menu = menus.get(menuIndex);
-			menu.setSort(new Long(menuIndex + 1));
-			menus.set(menuIndex, menu);
-		}
-		menuPersistence.save(menus);
 	}
 
 }
