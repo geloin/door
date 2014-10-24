@@ -1,0 +1,87 @@
+ul,li {
+	margin: 0px;
+	padding: 0px;
+	list-style-type: none;
+}
+.paging {
+	cursor:pointer;
+	background-color: #c8c8c8;
+	color: #FFF;
+	font-size: 12px;
+	font-family: '微软雅黑 Regular', '微软雅黑';
+	text-align: center;
+	height: 21px;
+	width: 21px;
+	line-height: 21px!important;
+	float: left;
+	margin-right: 3px;
+	border-radius:1em;
+}
+.paging_pitch {
+	color: #333;
+	font-size: 12px;
+	font-family: '微软雅黑 Regular', '微软雅黑';
+	text-align: center;
+	height: 21px;
+	width: 21px;
+	line-height: 21px!important;
+	float: left;
+	margin-right: 3px;
+	font-weight: bold;
+}
+.nextPage {
+	cursor:pointer;
+	font-size: 10px;
+	height: 21px;
+	width: 21px;
+	float: left;
+	text-align: center;
+	line-height: 21px!important;
+}
+.allPage {
+	font-size: 12px;
+	height: 21px;
+	width: 50px;
+	float: left;
+	text-align: center;
+	line-height: 21px!important;
+	color: #999;
+	font-family: '微软雅黑 Regular', '微软雅黑';
+}
+.go_area {
+	float: left;
+	background-image: url(images/u1092.gif);
+	height: 21px;
+	width: 70px;
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+	background-repeat: no-repeat;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 12px;
+	font-family: '微软雅黑 Regular', '微软雅黑';
+	color: #333;
+}
+.go_left {
+	margin-left: 5px!important;
+	width: 20px!important;
+	border: none!important;
+	font-family: "宋体"!important;
+	font-size: 12px!important;
+	background-color: transparent!important;
+	float: left;
+	outline:none;
+	height:20px!important;
+	bblr:expression(this.onFocus=this.blur())!important;/*IE使用*/
+    outline-style:none!important;/*FF使用*/
+}
+.go_right {
+	display: block !important;
+	height: 30px !important;
+	width: 26px !important;
+	text-align: center !important;
+	float: left !important;
+	line-height: 20px !important;
+	cursor:pointer !important;
+}
