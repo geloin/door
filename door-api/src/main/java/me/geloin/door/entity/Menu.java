@@ -13,8 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -58,11 +56,10 @@ public class Menu {
 	/**
 	 * 父节点
 	 */
-	@ManyToOne
-	@JoinColumn(name = "C_PARENT_ID")
-	private Menu parent;
+	@Column(name = "C_PARENT_ID")
+	private Long parentId;
 
-	@Column(name = "C_CREATE_TIME")
+	@Column(name = "C_CREATE_TIME", columnDefinition = "TIMESTAMP(6)")
 	private Date createTime;
 
 	public Long getId() {
@@ -89,12 +86,12 @@ public class Menu {
 		this.sort = sort;
 	}
 
-	public Menu getParent() {
-		return parent;
+	public Long getParentId() {
+		return parentId;
 	}
 
-	public void setParent(Menu parent) {
-		this.parent = parent;
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
 	}
 
 	public String getUrl() {
