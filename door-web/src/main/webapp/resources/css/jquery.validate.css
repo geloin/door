@@ -1,0 +1,12 @@
+input.error { 
+	border: 1px solid error; 
+}
+form div.error, div.error {
+    /* remove the next line when you have trouble in IE6 with labels in list */
+    color: #B94A48;
+	font-family: "宋体";
+	font-size: 12px;
+	line-height: 15px;
+	display:inline;
+	white-space: nowrap; 
+}

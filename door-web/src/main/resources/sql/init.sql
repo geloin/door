@@ -22,7 +22,7 @@ create table DOOR_MENU
   C_SORT      NUMBER(19),
   C_URL       VARCHAR2(255),
   C_PARENT_ID NUMBER(19),
-  C_CREATE_TIME DATE
+  C_CREATE_TIME TIMESTAMP(6)
 );
 alter table DOOR_MENU
   add primary key (ID)
@@ -36,9 +36,6 @@ alter table DOOR_MENU
     minextents 1
     maxextents unlimited
   );
-alter table DOOR_MENU
-  add constraint FK5502C750D0A6CD30 foreign key (C_PARENT_ID)
-  references DOOR_MENU (ID);
 
 prompt
 prompt Creating table DOOR_CHANNEL
@@ -219,29 +216,26 @@ Begin
 End;
 /
 
-insert into DOOR_MENU (ID, C_NAME, C_SORT, C_URL, C_PARENT_ID)
-values (1, 'DOOR', 1, '#', null);
+insert into DOOR_MENU (ID, C_NAME, C_SORT, C_URL)
+values (1, '系统管理', 0, '#');
 commit;
 insert into DOOR_MENU (ID, C_NAME, C_SORT, C_URL, C_PARENT_ID)
-values (11, '系统管理', 11, '#', 1);
+values (2, '内容管理', 1, '#', 1);
 commit;
 insert into DOOR_MENU (ID, C_NAME, C_SORT, C_URL, C_PARENT_ID)
-values (12, '内容管理', 12, '#', 1);
+values (3, '用户管理', 111, 'admin/user/list.html', 11);
 commit;
 insert into DOOR_MENU (ID, C_NAME, C_SORT, C_URL, C_PARENT_ID)
-values (111, '用户管理', 111, 'admin/user/list.html', 11);
+values (4, '菜单管理', 112, 'admin/menu/list.html', 11);
 commit;
 insert into DOOR_MENU (ID, C_NAME, C_SORT, C_URL, C_PARENT_ID)
-values (112, '菜单管理', 112, 'admin/menu/list.html', 11);
+values (5, '栏目管理', 121, 'admin/channel/list.html', 12);
 commit;
 insert into DOOR_MENU (ID, C_NAME, C_SORT, C_URL, C_PARENT_ID)
-values (121, '栏目管理', 121, 'admin/channel/list.html', 12);
+values (6, '文章管理', 122, 'admin/article/list.html', 12);
 commit;
 insert into DOOR_MENU (ID, C_NAME, C_SORT, C_URL, C_PARENT_ID)
-values (122, '文章管理', 122, 'admin/article/list.html', 12);
-commit;
-insert into DOOR_MENU (ID, C_NAME, C_SORT, C_URL, C_PARENT_ID)
-values (123, '资源管理', 123, 'admin/attachment/list.html', 12);
+values (7, '资源管理', 123, 'admin/attachment/list.html', 12);
 commit;
 update DOOR_MENU set C_SORT = ID;
 commit;

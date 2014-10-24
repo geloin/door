@@ -1,0 +1,190 @@
+.test_ImGrid {
+	width: 100%;
+	background-color: #FFFFFF;
+}
+
+.test_ImGrid_title {
+	height: 29px;
+	border: 0px solid red;
+	overflow: hidden;
+}
+
+.test_ImGrid_data {
+	border: 0px solid red;
+	overflow: auto;
+	padding: 0px;
+}
+
+.test_data_content {
+	border-bottom: 1px solid #eeeeee;
+	border-right: 1px solid #eeeeee;
+}
+
+.test_title_content {
+	font-size: 14px;
+	line-height: 20px;
+	background-color: #e4f4fb;
+	-moz-user-select: -moz-none;
+	-moz-user-select: none;
+	-o-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	border-right: 1px solid #eeeeee;
+	border-bottom: 1px solid #eeeeee;
+}
+
+.test_title {
+	text-align: center;
+}
+
+.test_title_mouseover {
+	background-color: #eeeeff;
+}
+
+.test_editor {
+	font-size: 14px;
+	line-height: 20px;
+	padding: 0px;
+	border: 1px solid #333333;
+}
+
+.test_text_editor {
+	*margin-top: -1px;
+}
+
+.test_function_editor {
+	background-color: white;
+	cursor: pointer;
+	border-right: 0px;
+	float: left;
+}
+
+.test_function_button {
+	width: 15px;
+	height: 19px;
+	border: 1px solid #333333;
+	background: url("handle_bg.gif") no-repeat -42px -1px;
+	background-color: white;
+	cursor: pointer;
+	border-left: 0px;
+	float: right;
+}
+
+.test_money_editor {
+	text-align: right;
+	*margin-top: -1px;
+}
+
+.test_combobox_editor {
+	border-right: 0px;
+	float: left;
+}
+
+.test_combobox_button {
+	width: 15px;
+	height: 19px;
+	border: 1px solid #333333;
+	background: url("handle_bg.gif") no-repeat -42px -1px;
+	background-color: white;
+	cursor: pointer;
+	border-left: 0px;
+	float: right;
+}
+
+.test_combobox_options {
+	border: 1px solid black;
+	background-color: white;
+	position: relative;
+	max-height: 200px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.test_combobox_option:hover {
+	background-color: blue;
+	color: white;
+	border: 1px dotted black;
+}
+
+.test_combobox_option {
+	border: 1px solid white;
+	height: 29px;
+}
+
+.test_area {
+	width: 100%;
+}
+
+.test_row {
+	font-size: 14px;
+	line-height: 20px;
+}
+
+.test_row_odd {
+	background-color: #ffffff;
+}
+
+.test_row_even {
+	background-color: #fbfcfc;
+}
+
+.test_row_mouseover {
+	background-color: #f7ffff;
+}
+
+.test_row_checked {
+	background-color: #f7ffff;
+}
+
+.test_row_actived {
+	background-color: #f7ffff;
+}
+
+.test_col {
+	line-height:29px;
+	border-left: 1px solid #eeeeee;
+	border-top: 1px solid #eeeeee;
+	float: left;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	padding-left: 1px;
+	padding-right: 1px;
+}
+
+.test_button {
+	width: 29px;
+	cursor: pointer;
+	float: left;
+}
+
+.test_button_add {
+	background: url("handle_bg.gif") no-repeat -40px 0px;
+}
+
+.test_button_edit {
+	background: url("handle_bg.gif") no-repeat -60px 0px;
+}
+
+.test_button_del {
+	background: url("handle_bg.gif") no-repeat -80px 0px;
+}
+
+.test_col_caigou {
+	width: 36px;
+	height: 29px;
+}
+
+.test_col_caigou_true {
+	background: url("jpg.gif") no-repeat 10px 0px;
+}
+
+.test_col_caigou_false {
+	background: url("folder.gif") no-repeat 10px 0px;
+}
+
+.test_col input{
+    margin-top:-2px!important;
+}
