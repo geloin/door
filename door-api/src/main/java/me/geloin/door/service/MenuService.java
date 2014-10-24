@@ -8,8 +8,7 @@ package me.geloin.door.service;
 
 import java.util.List;
 
-import me.geloin.door.bean.DataGridVO;
-import me.geloin.door.bean.ListDto;
+import me.geloin.door.bean.CollVO;
 import me.geloin.door.entity.Menu;
 
 /**
@@ -33,82 +32,28 @@ public interface MenuService {
 	public List<Menu> findAll();
 
 	/**
-	 * find by queries
+	 * 分页获取菜单
 	 * 
-	 * @author geloin
-	 * 
-	 * @date 2013-12-26 下午4:23:03
-	 * 
+	 * @author Geloin
+	 * @date Oct 22, 2014 5:17:14 PM
 	 * @param name
-	 *            name
 	 * @param url
-	 *            url, controller
 	 * @param parentId
-	 *            parent menu's id
-	 * @param grid
-	 *            view object, include page, pageSize, sortNames and
-	 *            sortDescribes
+	 * @param pageNum
+	 * @param pageSize
 	 * @return
 	 */
-	public ListDto<Menu> findAll(String name, String url, Long parentId,
-			DataGridVO grid);
-
+	public CollVO<Menu> findAll(String name, String url, Long parentId,
+			Integer pageNum, Integer pageSize);
+	
 	/**
-	 * find by id
+	 * save or update menu
 	 * 
-	 * @author geloin
-	 * 
-	 * @date 2013-12-31 下午1:17:23
-	 * 
-	 * @param id
+	 * @author Geloin
+	 * @date Oct 24, 2014 4:23:43 PM
+	 * @param entity
 	 * @return
 	 */
-	public Menu findOne(Long id);
+	public Menu save(Menu entity);
 
-	/**
-	 * delete in batch
-	 * 
-	 * @author geloin
-	 * 
-	 * @date 2013-12-31 下午4:05:25
-	 * 
-	 * @param ids
-	 */
-	public void delete(List<Long> ids);
-
-	/**
-	 * save menu
-	 * 
-	 * @author geloin
-	 * 
-	 * @date 2013-12-31 下午5:36:05
-	 * 
-	 * @param menu
-	 * @return
-	 */
-	public Menu save(Menu menu);
-
-	/**
-	 * update sort
-	 * 
-	 * @author geloin
-	 * 
-	 * @date 2014-1-9 上午10:36:31
-	 * 
-	 * @param ids
-	 * @param optId
-	 * @param parentId
-	 */
-	public void updateSort(List<Long> ids, Integer optId, Long parentId);
-
-	/**
-	 * reload sort, set sort start from 1 and then next
-	 * 
-	 * @author geloin
-	 * 
-	 * @date 2014-1-9 下午3:17:24
-	 * 
-	 * @param parentId
-	 */
-	public void reloadSort(Long parentId);
 }
